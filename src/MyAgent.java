@@ -31,8 +31,6 @@ public class MyAgent extends ArtificialAgent {
 		List<EDirection> result = new ArrayList<EDirection>();
 		aStar(result);
 
-		out.println("Just finished with resulting list: " + Arrays.toString(result.toArray()));
-
 		long searchTime = System.currentTimeMillis() - searchStartMillis;
         
         if (verbose) {
@@ -57,9 +55,6 @@ public class MyAgent extends ArtificialAgent {
 		while (!queue.isEmpty()) {
 			BoardCompact currentBoard = queue.poll();
 			explored.add(currentBoard);
-
-			out.println("Exploring a part of the queue!");
-			currentBoard.debugPrint();
 
 			if (currentBoard.isVictory()) {
 				result.addAll(currentBoard.previousActions);
