@@ -1,11 +1,16 @@
 import static java.lang.System.out;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import agents.ArtificialAgent;
 import game.actions.EDirection;
 import game.actions.compact.*;
 import game.board.compact.BoardCompact;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * The simplest Tree-DFS agent.
@@ -14,15 +19,19 @@ import game.board.compact.BoardCompact;
 public class MyAgent extends ArtificialAgent {
 	protected BoardCompact board;
 	protected int searchedNodes;
+	protected int maxSearchedNodes;
 	
 	@Override
 	protected List<EDirection> think(BoardCompact board) {
 		this.board = board;
 		searchedNodes = 0;
+		maxSearchedNodes = 20;
 		long searchStartMillis = System.currentTimeMillis();
 		
 		List<EDirection> result = new ArrayList<EDirection>();
-		dfs(5, result); // the number marks how deep we will search (the longest plan we will consider)
+		aStar(result);
+
+		out.println("Just finished with resulting list: " + Arrays.toString(result.toArray()));
 
 		long searchTime = System.currentTimeMillis() - searchStartMillis;
         
@@ -35,49 +44,44 @@ public class MyAgent extends ArtificialAgent {
 		return result.isEmpty() ? null : result;
 	}
 
-	private boolean dfs(int level, List<EDirection> result) {
-		if (level <= 0) return false; // DEPTH-LIMITED
-		
-		++searchedNodes;
-		
-		// COLLECT POSSIBLE ACTIONS
-		
-		List<CAction> actions = new ArrayList<CAction>(4);
-		
-		for (CMove move : CMove.getActions()) {
-			if (move.isPossible(board)) {
-				actions.add(move);
-			}
+	private boolean aStar(List<EDirection> result) {
+		if (searchedNodes > maxSearchedNodes) {
+			return false;
 		}
-		for (CPush push : CPush.getActions()) {
-			if (push.isPossible(board)) {
-				actions.add(push);
-			}
-		}
-		
-		// TRY ACTIONS
-		for (CAction action : actions) {
-			// PERFORM THE ACTION
-			result.add(action.getDirection());
-			action.perform(board);
-			
-			// CHECK VICTORY
-			if (board.isVictory()) {
-				// SOLUTION FOUND!
+
+		Set<BoardCompact> explored = new HashSet<>();
+
+		Queue<BoardCompact> queue = new PriorityQueue<>();
+		queue.add(board.clone());
+
+		while (!queue.isEmpty()) {
+			BoardCompact currentBoard = queue.poll();
+			explored.add(currentBoard);
+
+			out.println("Exploring a part of the queue!");
+			currentBoard.debugPrint();
+
+			if (currentBoard.isVictory()) {
+				result.addAll(currentBoard.previousActions);
 				return true;
 			}
-			
-			// CONTINUE THE SEARCH
-			if (dfs(level - 1, result)) {
-				// SOLUTION FOUND!
-				return true;
+
+			List<CAction> potential_actions = new ArrayList<>();
+			potential_actions.addAll(CMove.getActions());
+			potential_actions.addAll(CPush.getActions());
+
+			for (CAction action : potential_actions) {
+				if (action.isPossible(currentBoard)) {
+					BoardCompact resultBoard = currentBoard.clone();
+					action.perform(resultBoard);
+					resultBoard.previousActions.add(action.getDirection());
+					if (!explored.contains(resultBoard)) {
+						queue.add(resultBoard);
+					}
+				}
 			}
-			
-			// REVERSE ACTION
-			result.remove(result.size()-1);
-			action.reverse(board);
 		}
-		
+
 		return false;
 	}
 }

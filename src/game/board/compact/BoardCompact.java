@@ -1,5 +1,6 @@
 package game.board.compact;
 
+import game.actions.EDirection;
 import game.board.compressed.BoardCompressed;
 import game.board.compressed.MTile;
 import game.board.compressed.MTile.SubSlimTile;
@@ -10,6 +11,8 @@ import game.board.oop.EPlace;
 import game.board.oop.ESpace;
 import game.board.slim.BoardSlim;
 import game.board.slim.STile;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * More memory-compact representation of OOP-bulky {@link Board}.
@@ -19,7 +22,7 @@ import game.board.slim.STile;
  * 
  * @author Jimmy
  */
-public class BoardCompact implements Cloneable {
+public class BoardCompact implements Cloneable, Comparable {
 
 	private Integer hash = null;
 	
@@ -33,6 +36,8 @@ public class BoardCompact implements Cloneable {
 	
 	public int boxCount;
 	public int boxInPlaceCount;
+
+	public List<EDirection> previousActions;
 	
 	private BoardCompact() {
 	}
@@ -44,6 +49,7 @@ public class BoardCompact implements Cloneable {
 				tiles[x][y] = 0;
 			}			
 		}
+		previousActions = new ArrayList<>();
 	}
 	
 	@Override
@@ -59,6 +65,7 @@ public class BoardCompact implements Cloneable {
 		result.playerY = playerY;
 		result.boxCount = boxCount;
 		result.boxInPlaceCount = boxInPlaceCount;
+		result.previousActions = new ArrayList<>(previousActions);
 		return result;
 	}
 	
@@ -327,5 +334,9 @@ public class BoardCompact implements Cloneable {
 	public String toString() {
 		return "BoardCompact[\n" + getBoardString() + "\n]";
 	}
-	
+
+	@Override
+	public int compareTo(Object o) {
+		return 0;
+	}
 }
