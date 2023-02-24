@@ -335,8 +335,23 @@ public class BoardCompact implements Cloneable, Comparable {
 		return "BoardCompact[\n" + getBoardString() + "\n]";
 	}
 
+	private int gn() {
+		return this.previousActions.size();
+	}
+
+	private float fn() {
+		// HEURISTIC
+		return 0.0f;
+	}
+
+	private float cost() {
+		return this.gn() + this.fn();
+	}
+
 	@Override
 	public int compareTo(Object o) {
-		return 0;
+		BoardCompact other = (BoardCompact) o;
+
+		return (int) Math.round(this.cost() - other.cost());
 	}
 }
