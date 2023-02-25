@@ -80,12 +80,15 @@ public class CPush extends CAction {
 		
 		// TILE TO THE DIR IS NOT BOX
 		if (!CTile.isSomeBox(board.tile(playerX+pushDirection.dX, playerY+pushDirection.dY))) return false;
-		
+
 		// BOX IS ON THE EDGE IN THE GIVEN DIR
 		if (!CAction.isOnBoard(board, playerX+pushDirection.dX, playerY+pushDirection.dY, pushDirection)) return false;
-		
+
 		// TILE TO THE DIR OF THE BOX IS NOT FREE
 		if (!CTile.isFree(board.tile(playerX+pushDirection.dX+pushDirection.dX, playerY+pushDirection.dY+pushDirection.dY))) return false;
+
+		// TILE WE PUSH TO IS DEAD SQUARE
+		if (board.deadSquares[playerX+2*pushDirection.dX][playerY+2*pushDirection.dY]) return false;
 				
 		// YEP, WE CAN PUSH
 		return true;

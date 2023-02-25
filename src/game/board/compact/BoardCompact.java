@@ -38,11 +38,12 @@ public class BoardCompact implements Cloneable, Comparable {
 	public int boxInPlaceCount;
 
 	public List<EDirection> previousActions;
+	public boolean[][] deadSquares;
 	
 	private BoardCompact() {
 	}
 	
-	public BoardCompact(int width, int height) {
+	public BoardCompact(int width, int height, boolean[][] deadSquares) {
 		tiles = new int[width][height];
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
@@ -50,6 +51,7 @@ public class BoardCompact implements Cloneable, Comparable {
 			}			
 		}
 		previousActions = new ArrayList<>();
+		this.deadSquares = deadSquares;
 	}
 	
 	@Override
@@ -66,6 +68,7 @@ public class BoardCompact implements Cloneable, Comparable {
 		result.boxCount = boxCount;
 		result.boxInPlaceCount = boxInPlaceCount;
 		result.previousActions = new ArrayList<>(previousActions);
+		result.deadSquares = deadSquares;
 		return result;
 	}
 	

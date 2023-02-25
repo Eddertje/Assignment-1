@@ -139,7 +139,7 @@ public class Board implements Cloneable {
 	 * @return
 	 */
 	public BoardCompact makeBoardCompact() {
-		BoardCompact result = new BoardCompact(width, height);
+		BoardCompact result = new BoardCompact(width, height, null);
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
 				result.tiles[x][y] = tile(x, y).computeTileFlag();

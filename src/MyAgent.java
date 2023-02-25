@@ -1,3 +1,4 @@
+import agents.DeadSquareDetector;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +28,8 @@ public class MyAgent extends ArtificialAgent {
 		searchedNodes = 0;
 		maxSearchedNodes = 20;
 		long searchStartMillis = System.currentTimeMillis();
-		
+
+		board.deadSquares = DeadSquareDetector.detect(board);
 		List<EDirection> result = new ArrayList<EDirection>();
 		aStar(result);
 
@@ -43,16 +45,14 @@ public class MyAgent extends ArtificialAgent {
 	}
 
 	private boolean aStar(List<EDirection> result) {
-		if (searchedNodes > maxSearchedNodes) {
-			return false;
-		}
-
 		Set<BoardCompact> explored = new HashSet<>();
 
 		Queue<BoardCompact> queue = new PriorityQueue<>();
 		queue.add(board.clone());
 
 		while (!queue.isEmpty()) {
+			searchedNodes++;
+
 			BoardCompact currentBoard = queue.poll();
 			explored.add(currentBoard);
 
