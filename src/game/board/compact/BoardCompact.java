@@ -344,6 +344,27 @@ public class BoardCompact implements Cloneable, Comparable {
 
 	private float fn() {
 		// HEURISTIC
+		List<int[]> boxes = new ArrayList<>();
+		List<int[]> flags = new ArrayList<>();
+		for (int i = 0; i < tiles.length; i++) {
+			for (int j = 0; j < tiles[0].length; j++) {
+				if(CTile.forAnyBox(tiles[i][j])) {
+					flags.add(new int[]{i, j});
+				}
+				if(CTile.isSomeBox(tiles[i][j])) {
+					boxes.add(new int[]{i, j});
+				}
+			}
+		}
+		HungarianAlgorithm ha = new HungarianAlgorithm(boxes, flags);
+		int[][] matches = ha.findOptimalAssignment();
+		float total = 0;
+		for (int[] match : matches) {
+			int[] box = boxes.get(match[0]);
+			int[] flag = flags.get(match[1]);
+			total += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
+		}
+
 		return 0.0f;
 	}
 
