@@ -22,7 +22,6 @@ public class HungarianAlgorithm {
 
     public HungarianAlgorithm(List<int[]> boxes, List<int[]> flags) {
         int[][] matrix = new int[boxes.size()][flags.size()];
-        System.out.println("The matrix is not square!: x= " + matrix.length + " y= " + matrix[0].length);
         if (matrix.length != matrix[0].length) {
             try {
                 throw new IllegalAccessException("The matrix is not square!: x= " + matrix.length + " y= " + matrix[0].length);

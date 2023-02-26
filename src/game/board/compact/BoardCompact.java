@@ -348,7 +348,7 @@ public class BoardCompact implements Cloneable, Comparable {
 		List<int[]> flags = new ArrayList<>();
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				if(CTile.forAnyBox(tiles[i][j])) {
+				if(CTile.forSomeBox(tiles[i][j])) {
 					flags.add(new int[]{i, j});
 				}
 				if(CTile.isSomeBox(tiles[i][j])) {
@@ -358,15 +358,26 @@ public class BoardCompact implements Cloneable, Comparable {
 		}
 		HungarianAlgorithm ha = new HungarianAlgorithm(boxes, flags);
 		int[][] matches = ha.findOptimalAssignment();
-		float total = 0;
+		float total = Float.POSITIVE_INFINITY;
+		for (int[] box : boxes) {
+			float distance = Math.abs(box[0] - playerX) + Math.abs(box[1] - playerY);
+			total = Math.min(total, distance);
+		}
 		for (int[] match : matches) {
 			int[] box = boxes.get(match[0]);
 			int[] flag = flags.get(match[1]);
 			total += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
 		}
 
-		return 0.0f;
+		return total;
 	}
+	//solving level 1... solved in 7488,0 ms (101 steps)
+	//solving level 2... solved in 5773,0 ms (150 steps)
+	//solving level 3... solved in 8468,0 ms (106 steps)
+	//solving level 4... solved in 12172,0 ms (120 steps)
+	//solving level 5... solved in 14057,0 ms (171 steps)
+	//solving level 6... solved in 15383,0 ms (136 steps)
+	//solving level 7... solved in 10799,0 ms (178 steps)
 
 	private float cost() {
 		return this.gn() + this.fn();

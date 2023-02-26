@@ -80,7 +80,7 @@ public class SokobanMain {
 	public static void main(String[] args) throws Exception {
         String agentId = null;
         String className = "MyAgent";
-        String levelset = "easy.sok";
+        String levelset = "Aymeric_medium.sok";
         int level = 0;
         int maxFail = 0;
         boolean optimal = false;
