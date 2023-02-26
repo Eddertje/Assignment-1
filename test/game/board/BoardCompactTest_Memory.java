@@ -42,7 +42,7 @@ public class BoardCompactTest_Memory {
 		BoardCompact board;
 		
 		while (true) {
-			board = new BoardCompact(16,16);
+			board = new BoardCompact(16,16, null);
 			boards.add(board);
 			++count;
 			if (count % 100 == 0) {
