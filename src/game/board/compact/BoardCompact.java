@@ -39,6 +39,8 @@ public class BoardCompact implements Cloneable, Comparable {
 
 	public List<EDirection> previousActions;
 	public boolean[][] deadSquares;
+
+	private float heuristic = -1;
 	
 	private BoardCompact() {
 	}
@@ -343,6 +345,9 @@ public class BoardCompact implements Cloneable, Comparable {
 	}
 
 	private float fn() {
+		if(heuristic != -1) {
+			return heuristic;
+		}
 		// HEURISTIC
 		List<int[]> boxes = new ArrayList<>();
 		List<int[]> flags = new ArrayList<>();
@@ -390,7 +395,7 @@ public class BoardCompact implements Cloneable, Comparable {
 		System.exit(0);
 
 		 */
-
+		heuristic = total;
 		return total;
 	}
 	//solving level 1... solved in 7488,0 ms (101 steps)
