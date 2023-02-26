@@ -361,13 +361,35 @@ public class BoardCompact implements Cloneable, Comparable {
 		float total = Float.POSITIVE_INFINITY;
 		for (int[] box : boxes) {
 			float distance = Math.abs(box[0] - playerX) + Math.abs(box[1] - playerY);
-			total = Math.min(total, distance);
+			total = Math.min(total, distance-1);
 		}
 		for (int[] match : matches) {
-			int[] box = boxes.get(match[0]);
-			int[] flag = flags.get(match[1]);
+			int[] box = boxes.get(match[1]);
+			int[] flag = flags.get(match[0]);
 			total += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
 		}
+		/*
+		System.out.println(total);
+		System.out.println("boxes");
+		for (int[] box : boxes) {
+			System.out.print("("+ box[0] + " , " + box[1] + "), ");
+		}
+		System.out.println("");
+		System.out.println("flags");
+		for (int[] box : flags) {
+			System.out.print("("+ box[0] + " , " + box[1] + "), ");
+		}
+		System.out.println("");
+		System.out.println("pairings");
+		for (int[] box : matches) {
+			for (int i : box) {
+				System.out.print(i + " ");
+			}
+			System.out.println("");
+		}
+		System.exit(0);
+
+		 */
 
 		return total;
 	}
@@ -386,7 +408,6 @@ public class BoardCompact implements Cloneable, Comparable {
 	@Override
 	public int compareTo(Object o) {
 		BoardCompact other = (BoardCompact) o;
-
 		return (int) Math.round(this.cost() - other.cost());
 	}
 }

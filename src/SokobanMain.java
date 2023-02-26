@@ -83,7 +83,7 @@ public class SokobanMain {
         String levelset = "Aymeric_medium.sok";
         int level = 0;
         int maxFail = 0;
-        boolean optimal = false;
+        boolean optimal = true;
         String resultDir = null;
         int timeout = 0;
         boolean verbose = false;
