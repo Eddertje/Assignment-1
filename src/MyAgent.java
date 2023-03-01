@@ -57,7 +57,7 @@ public class MyAgent extends ArtificialAgent {
 			explored.add(currentBoard);
 
 			if (currentBoard.isVictory()) {
-				result.addAll(currentBoard.previousActions);
+				result.addAll(currentBoard.getActions());
 				return true;
 			}
 
@@ -69,7 +69,7 @@ public class MyAgent extends ArtificialAgent {
 				if (action.isPossible(currentBoard)) {
 					BoardCompact resultBoard = currentBoard.clone();
 					action.perform(resultBoard);
-					resultBoard.previousActions.add(action.getDirection());
+					resultBoard.action = action.getDirection();
 					if (!explored.contains(resultBoard)) {
 						queue.add(resultBoard);
 					}

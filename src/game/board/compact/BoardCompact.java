@@ -37,7 +37,9 @@ public class BoardCompact implements Cloneable, Comparable {
 	public int boxCount;
 	public int boxInPlaceCount;
 
-	public List<EDirection> previousActions;
+	public EDirection action;
+	public BoardCompact previousState;
+	private int gn;
 	public boolean[][] deadSquares;
 
 	private float heuristic = -1;
@@ -52,7 +54,8 @@ public class BoardCompact implements Cloneable, Comparable {
 				tiles[x][y] = 0;
 			}			
 		}
-		previousActions = new ArrayList<>();
+		action = null;
+		previousState = null;
 		this.deadSquares = deadSquares;
 	}
 	
@@ -69,8 +72,9 @@ public class BoardCompact implements Cloneable, Comparable {
 		result.playerY = playerY;
 		result.boxCount = boxCount;
 		result.boxInPlaceCount = boxInPlaceCount;
-		result.previousActions = new ArrayList<>(previousActions);
+		result.previousState = this;
 		result.deadSquares = deadSquares;
+		result.gn = this.gn + 1;
 		return result;
 	}
 	
@@ -341,7 +345,7 @@ public class BoardCompact implements Cloneable, Comparable {
 	}
 
 	private int gn() {
-		return this.previousActions.size();
+		return this.gn;
 	}
 
 	private float fn() {
@@ -408,6 +412,16 @@ public class BoardCompact implements Cloneable, Comparable {
 
 	private float cost() {
 		return this.gn() + this.fn();
+	}
+
+	public List<EDirection> getActions() {
+		if (this.previousState == null) {
+			return new ArrayList<>();
+		} else {
+			List<EDirection> result = previousState.getActions();
+			result.add(this.action);
+			return result;
+		}
 	}
 
 	@Override
