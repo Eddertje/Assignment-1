@@ -40,7 +40,7 @@ public class CPush extends CAction {
 		this.dir = dir;
 		this.dirs = new EDirection[]{ dir };
 	}
-	
+
 	@Override
 	public EActionType getType() {
 		return EActionType.PUSH;

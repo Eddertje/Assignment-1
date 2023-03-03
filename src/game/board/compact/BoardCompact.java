@@ -12,6 +12,8 @@ import game.board.oop.ESpace;
 import game.board.slim.BoardSlim;
 import game.board.slim.STile;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,6 +45,10 @@ public class BoardCompact implements Cloneable, Comparable {
 	public boolean[][] deadSquares;
 
 	private float heuristic = -1;
+
+	private static HashMap<Integer, Float> outcomes;
+
+	public static int saves;
 	
 	private BoardCompact() {
 	}
@@ -56,6 +62,8 @@ public class BoardCompact implements Cloneable, Comparable {
 		}
 		action = null;
 		previousState = null;
+		outcomes = new HashMap<Integer, Float>();
+		saves = 0;
 		this.deadSquares = deadSquares;
 	}
 	
@@ -365,50 +373,110 @@ public class BoardCompact implements Cloneable, Comparable {
 				}
 			}
 		}
-		HungarianAlgorithm ha = new HungarianAlgorithm(boxes, flags);
-		int[][] matches = ha.findOptimalAssignment();
+
 		float total = Float.POSITIVE_INFINITY;
 		for (int[] box : boxes) {
 			float distance = Math.abs(box[0] - playerX) + Math.abs(box[1] - playerY);
-			total = Math.min(total, distance-1);
+			total = Math.min(total, distance - 1);
 		}
+		/*
+		if(outcomes.containsKey(boxes.hashCode())) {
+			saves++;
+			return total + outcomes.get(boxes.hashCode());
+		}
+		HungarianAlgorithm ha = new HungarianAlgorithm(boxes, flags);
+		int[][] matches = ha.findOptimalAssignment();
+		float minimumMatch = 0;
 		for (int[] match : matches) {
 			int[] box = boxes.get(match[1]);
 			int[] flag = flags.get(match[0]);
-			total += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
+			minimumMatch += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
 		}
-		/*
-		System.out.println(total);
-		System.out.println("boxes");
-		for (int[] box : boxes) {
-			System.out.print("("+ box[0] + " , " + box[1] + "), ");
-		}
-		System.out.println("");
-		System.out.println("flags");
-		for (int[] box : flags) {
-			System.out.print("("+ box[0] + " , " + box[1] + "), ");
-		}
-		System.out.println("");
-		System.out.println("pairings");
-		for (int[] box : matches) {
-			for (int i : box) {
-				System.out.print(i + " ");
-			}
-			System.out.println("");
-		}
-		System.exit(0);
-
 		 */
+
+		float minimumMatch = 0;
+		for(int[] box : boxes) {
+			float currentMin = Float.POSITIVE_INFINITY;
+			for (int[] flag : flags) {
+				currentMin = Math.min(currentMin, Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]));
+			}
+			minimumMatch += currentMin;
+		}
+
+
+		//outcomes.put(boxes.hashCode(), minimumMatch);
+		total += minimumMatch;
+
 		heuristic = total;
 		return total;
 	}
-	//solving level 1... solved in 7488,0 ms (101 steps)
-	//solving level 2... solved in 5773,0 ms (150 steps)
-	//solving level 3... solved in 8468,0 ms (106 steps)
-	//solving level 4... solved in 12172,0 ms (120 steps)
-	//solving level 5... solved in 14057,0 ms (171 steps)
-	//solving level 6... solved in 15383,0 ms (136 steps)
-	//solving level 7... solved in 10799,0 ms (178 steps)
+	/*
+solving level 1... 93893
+solved in 1630,0 ms (97 steps)
+solving level 2... 81259
+solved in 1211,0 ms (148 steps)
+solving level 3... 97938
+solved in 1444,0 ms (104 steps)
+solving level 4... 123421
+solved in 2096,0 ms (113 steps)
+solving level 5... 127617
+solved in 2270,0 ms (171 steps)
+solving level 6... 147892
+solved in 2691,0 ms (136 steps)
+minimal distance
+solving level 1... solved in 5937,0 ms (119 steps)
+solving level 2... solved in 6952,0 ms (262 steps)
+solving level 3... solved in 7821,0 ms (151 steps)
+solving level 4... solved in 9094,0 ms (118 steps)
+solving level 5... solved in 9937,0 ms (245 steps)
+solving level 6... solved in 13324,0 ms (201 steps)
+solving level 7... solved in 15913,0 ms (140 steps)
+solving level 8... solved in 19106,0 ms (302 steps)
+solving level 9... solved in 23813,0 ms (158 steps)
+solving level 10... solved in 21728,0 ms (132 steps)
+solving level 11... solved in 25050,0 ms (146 steps)
+solving level 12... solved in 28021,0 ms (211 steps)
+solving level 13... solved in 48689,0 ms (147 steps)
+static map improvement
+solving level 1... solved in 1695,0 ms (97 steps)
+solving level 2... solved in 1243,0 ms (148 steps)
+solving level 3... solved in 1504,0 ms (104 steps)
+solving level 4... solved in 2230,0 ms (113 steps)
+solving level 5... solved in 2258,0 ms (171 steps)
+solving level 6... solved in 2595,0 ms (136 steps)
+solving level 7... solved in 2373,0 ms (178 steps)
+solving level 8... solved in 2618,0 ms (69 steps)
+solving level 9... solved in 1667,0 ms (110 steps)
+solving level 10... solved in 2529,0 ms (113 steps)
+Hard:
+solving level 1... solved in 8242,0 ms (119 steps)
+solving level 2... solved in 9567,0 ms (262 steps)
+solving level 3... solved in 10185,0 ms (151 steps)
+solving level 4... solved in 10837,0 ms (118 steps)
+solving level 5... solved in 11583,0 ms (245 steps)
+solving level 6... solved in 16778,0 ms (201 steps)
+solving level 7... solved in 19037,0 ms (140 steps)
+solving level 8... solved in 15608,0 ms (302 steps)
+solving level 9... solved in 23969,0 ms (158 steps)
+solving level 10... solved in 23325,0 ms (132 steps)
+solving level 11... solved in 20616,0 ms (146 steps)
+solving level 12... solved in 29724,0 ms (211 steps)
+solving level 13... solved in 54872,0 ms (147 steps)
+static map improvement:
+solving level 1... solved in 6833,0 ms (119 steps)
+solving level 2... solved in 8072,0 ms (262 steps)
+solving level 3... solved in 9244,0 ms (151 steps)
+solving level 4... solved in 10258,0 ms (118 steps)
+solving level 5... solved in 11242,0 ms (245 steps)
+solving level 6... solved in 15302,0 ms (201 steps)
+solving level 7... solved in 18077,0 ms (140 steps)
+solving level 8... solved in 15449,0 ms (302 steps)
+solving level 9... solved in 23590,0 ms (158 steps)
+solving level 10... solved in 22872,0 ms (132 steps)
+solving level 11... solved in 20158,0 ms (146 steps)
+solving level 12... solved in 28527,0 ms (211 steps)
+solving level 13... solved in 48358,0 ms (147 steps)
+	*/
 
 	private float cost() {
 		return this.gn() + this.fn();

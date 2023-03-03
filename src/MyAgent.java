@@ -40,7 +40,8 @@ public class MyAgent extends ArtificialAgent {
             out.printf("Performance: %.1f nodes/sec\n",
                         ((double)searchedNodes / (double)searchTime * 1000));
         }
-		
+		out.println(searchedNodes);
+		out.println(BoardCompact.saves);
 		return result.isEmpty() ? null : result;
 	}
 

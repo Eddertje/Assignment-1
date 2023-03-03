@@ -1,9 +1,6 @@
 package game.board.compact;
 
-import java.util.Arrays;
-        import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An implemetation of the Kuhn–Munkres assignment algorithm of the year 1957.
