@@ -1,7 +1,9 @@
 import agents.DeadSquareDetector;
+import game.actions.PushDistance;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class MyAgent extends ArtificialAgent {
 		long searchStartMillis = System.currentTimeMillis();
 
 		board.deadSquares = DeadSquareDetector.detect(board);
+		PushDistance.populate(board);
 		List<EDirection> result = new ArrayList<EDirection>();
 		aStar(result);
 

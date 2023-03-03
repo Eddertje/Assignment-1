@@ -10,13 +10,15 @@ public class DeadSquareBoard {
     private Type[] board;
     private int width;
     private int height;
-    private int pos;
+    public int pos;
+    public int distance;
 
     public DeadSquareBoard(BoardCompact orig, int startPos) {
         board = new Type[orig.width() * orig.height()];
         pos = startPos;
         width = orig.width();
         height = orig.height();
+        this.distance = 0;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (CTile.isWall(orig.tile(x, y))) {
@@ -50,6 +52,23 @@ public class DeadSquareBoard {
             result.add(pos - 1);
         }
         if (Type.WALL != board[pos - height] && Type.WALL != board[pos - 2*height]) {
+            result.add(pos - height);
+        }
+        return result;
+    }
+
+    public List<Integer> getAllPossibleActions() {
+        List<Integer> result = new ArrayList<>();
+        if (Type.WALL != board[pos + 1]) {
+            result.add(pos + 1);
+        }
+        if (Type.WALL != board[pos + height]) {
+            result.add(pos + height);
+        }
+        if (Type.WALL != board[pos - 1]) {
+            result.add(pos - 1);
+        }
+        if (Type.WALL != board[pos - height]) {
             result.add(pos - height);
         }
         return result;

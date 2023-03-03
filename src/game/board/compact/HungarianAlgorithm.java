@@ -1,5 +1,8 @@
 package game.board.compact;
 
+import game.actions.GoalToPos;
+import game.actions.PushDistance;
+import game.actions.oop.Push;
 import java.util.Arrays;
         import java.util.LinkedHashSet;
 import java.util.List;
@@ -35,7 +38,8 @@ public class HungarianAlgorithm {
             for (int j = 0; j < flags.size(); j++) {
                 int[] box = boxes.get(i);
                 int[] flag = flags.get(j);
-                matrix[i][j] = Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
+                matrix[i][j] = PushDistance.pushDistance.get(new GoalToPos(box[0], box[1], flag[0], flag[1]));
+                // matrix[i][j] = Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
             }
         }
 

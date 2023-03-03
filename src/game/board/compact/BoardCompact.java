@@ -1,6 +1,8 @@
 package game.board.compact;
 
 import game.actions.EDirection;
+import game.actions.GoalToPos;
+import game.actions.PushDistance;
 import game.board.compressed.BoardCompressed;
 import game.board.compressed.MTile;
 import game.board.compressed.MTile.SubSlimTile;
@@ -12,7 +14,9 @@ import game.board.oop.ESpace;
 import game.board.slim.BoardSlim;
 import game.board.slim.STile;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * More memory-compact representation of OOP-bulky {@link Board}.
@@ -375,40 +379,14 @@ public class BoardCompact implements Cloneable, Comparable {
 		for (int[] match : matches) {
 			int[] box = boxes.get(match[1]);
 			int[] flag = flags.get(match[0]);
-			total += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
-		}
-		/*
-		System.out.println(total);
-		System.out.println("boxes");
-		for (int[] box : boxes) {
-			System.out.print("("+ box[0] + " , " + box[1] + "), ");
-		}
-		System.out.println("");
-		System.out.println("flags");
-		for (int[] box : flags) {
-			System.out.print("("+ box[0] + " , " + box[1] + "), ");
-		}
-		System.out.println("");
-		System.out.println("pairings");
-		for (int[] box : matches) {
-			for (int i : box) {
-				System.out.print(i + " ");
-			}
-			System.out.println("");
-		}
-		System.exit(0);
 
-		 */
+			GoalToPos gtp = new GoalToPos(box[0], box[1], flag[0], flag[1]);
+			total += PushDistance.pushDistance.get(gtp);
+			// total += Math.abs(box[0] - flag[0]) + Math.abs(box[1] - flag[1]);
+		}
 		heuristic = total;
 		return total;
 	}
-	//solving level 1... solved in 7488,0 ms (101 steps)
-	//solving level 2... solved in 5773,0 ms (150 steps)
-	//solving level 3... solved in 8468,0 ms (106 steps)
-	//solving level 4... solved in 12172,0 ms (120 steps)
-	//solving level 5... solved in 14057,0 ms (171 steps)
-	//solving level 6... solved in 15383,0 ms (136 steps)
-	//solving level 7... solved in 10799,0 ms (178 steps)
 
 	private float cost() {
 		return this.gn() + this.fn();
